@@ -9,7 +9,6 @@ using (var testConnection = new SqlConnection(builder.Configuration.GetConnectio
 {
     testConnection.Open();
     Console.WriteLine("✅ Conexión abierta correctamente desde Program.cs");
-    // El using se encarga de cerrar la conexión automáticamente
 }
 
 // Registro de dependencias (Inyección de dependencias)
@@ -22,6 +21,10 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 // Repositorios y servicios de Productos
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
+// Repositorios y servicios de Sucursales (Branches)
+builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<IBranchService, BranchService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
