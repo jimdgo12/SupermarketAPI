@@ -14,8 +14,14 @@ using (var testConnection = new SqlConnection(builder.Configuration.GetConnectio
 
 // Registro de dependencias (Inyección de dependencias)
 builder.Services.AddControllers();
+
+// Repositorios y servicios de Categorías
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+// Repositorios y servicios de Productos
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
