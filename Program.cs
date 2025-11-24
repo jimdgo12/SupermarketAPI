@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Data;
 using SupermarketAPI.Repositories;
 using SupermarketAPI.Services;
 
@@ -13,6 +14,10 @@ using (var testConnection = new SqlConnection(builder.Configuration.GetConnectio
 
 // Registro de dependencias (Inyección de dependencias)
 builder.Services.AddControllers();
+
+// 🔑 Registro de IDbConnection para inyección en repositorios
+builder.Services.AddScoped<IDbConnection>(sp =>
+    new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Repositorios y servicios de Categorías
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -30,9 +35,9 @@ builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
-// Repositorios y servicios de Roles (Roles)
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IRoleService, RoleService>();
+// Repositorios y servicios de Clientes (Customers)
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
