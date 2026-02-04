@@ -15,7 +15,7 @@ using (var testConnection = new SqlConnection(builder.Configuration.GetConnectio
 // Registro de dependencias (Inyección de dependencias)
 builder.Services.AddControllers();
 
-// 🔑 Registro de IDbConnection para inyección en repositorios
+// 🔑 Registro de IDbConnection para inyección en repositorios (si algún repo usa directamente IDbConnection)
 builder.Services.AddScoped<IDbConnection>(sp =>
     new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -38,6 +38,14 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 // Repositorios y servicios de Clientes (Customers)
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+
+// Repositorios y servicios de Inventario (Inventory) ✅
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+
+// Repositorios y servicios de Roles ✅
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
