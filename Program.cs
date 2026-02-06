@@ -6,16 +6,23 @@ using SupermarketAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // 🔍 Prueba de conexión a la base de datos
-using (var testConnection = new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")))
+try
 {
-    testConnection.Open();
-    Console.WriteLine("✅ Conexión abierta correctamente desde Program.cs");
+    using (var testConnection = new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")))
+    {
+        testConnection.Open();
+        Console.WriteLine("✅ Conexión abierta correctamente desde Program.cs");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"❌ Error de conexión inicial: {ex.Message}");
 }
 
 // Registro de dependencias (Inyección de dependencias)
 builder.Services.AddControllers();
 
-// 🔑 Registro de IDbConnection para inyección en repositorios (si algún repo usa directamente IDbConnection)
+// 🔑 Registro de IDbConnection para inyección en repositorios
 builder.Services.AddScoped<IDbConnection>(sp =>
     new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -42,6 +49,14 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 // Repositorios y servicios de Inventario (Inventory) ✅
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+
+// --- NUEVO: Repositorios y servicios de Ventas (Sales) 🚀 ---
+builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+builder.Services.AddScoped<ISaleService, SaleService>();
+
+// --- NUEVO: Repositorios y servicios de Detalles de Ventas (DetailSales) 🧾 ---
+builder.Services.AddScoped<IDetailSalesRepository, DetailSalesRepository>();
+builder.Services.AddScoped<IDetailSalesService, DetailSalesService>();
 
 // Repositorios y servicios de Roles ✅
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
